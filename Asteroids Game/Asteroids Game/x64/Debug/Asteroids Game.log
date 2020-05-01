@@ -2,6 +2,14 @@
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(759,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(1099,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(1196,1): warning C4312: 'type cast': conversion from 'DWORD' to 'olcConsoleGameEngine *' of greater size
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(65,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(65,15): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(97,24): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(97,15): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(128,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(128,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(128,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(128,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(155,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(155,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(156,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(156,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Asteroids Game.vcxproj -> C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\x64\Debug\Asteroids Game.exe
