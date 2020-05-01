@@ -76,12 +76,12 @@ protected:
 		// if the input x is less than 0, then I want to adjust my output to be the input x plus the current screen width, which is an int (why we used a float)
 		if (ix < 0.0f) ox = ix + (float)ScreenWidth();
 		// if the input x is greater than the screen width, then we update the output again
-		if (ix >= ScreenWidth()) ox = ix - (float)ScreenWidth();
+		if (ix >= (float)ScreenWidth()) ox = ix - (float)ScreenWidth();
 		
 		// if the input y is less than 0, then I want to adjust my output to be the input y plus the current screen width, which is an int (why we used a float)
-		if (iy < 0.0f) ox = ix + (float)ScreenHeight();
+		if (iy < 0.0f) oy = iy + (float)ScreenHeight();
 		// if the input y is greater than the screen width, then we update the output again
-		if (iy >= ScreenHeight()) ox = ix - (float)ScreenHeight();
+		if (iy >= (float)ScreenHeight()) oy = iy - (float)ScreenHeight();
 
 	}
 };
