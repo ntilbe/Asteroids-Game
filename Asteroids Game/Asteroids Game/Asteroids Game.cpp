@@ -1,4 +1,9 @@
 // Asteroids Game.cpp 
+//							Controls/Rules
+//				~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Left and Right arrow keys steer the ship.Up arrow is thrust.There is no reverse thrust.
+//Space bar fires bullets.Get the highest score by surviving waves of asteroids.
+
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -29,133 +34,272 @@ private:
 		int nSize; //most of the objects will be asteroids and they will change in size
 		float angle;
 	};
-	//vectors to store the objects in the game
-	vector<sSpaceObject>  vecAsteroids; //this vector will store the Asteroids
-	sSpaceObject player;
 
+	//vectors to store the objects in the game
+	vector<sSpaceObject> vecAsteroids; //this vector will store the Asteroids
+	vector<sSpaceObject> vecBullets;
+	sSpaceObject player;
+	bool bDead = false;
+	int nScore = 0;
+
+	vector<pair<float, float>> vecModelShip;
+	vector<pair<float, float>> vecModelAsteroid;
 protected:
-	//called by olcConsoleGameEngine
-	//called when the application launches
+	// Called by olcConsoleGameEngine
 	virtual bool OnUserCreate()
 	{
-								// x,  	y		velocities
-		vecAsteroids.push_back({ 20.0f, 20.0f, 8.0f, -6.0f, (int)16, 0.0f }); // populates vector with a single Asteroid, using the initializer list to do this
+		vecModelShip =
+		{
+			{ 0.0f, -5.0f},
+			{-2.5f, +2.5f},
+			{+2.5f, +2.5f}
+		}; // A simple Isosceles Triangle
 
-		//initialize player position
+		// Create a "jagged" circle for the asteroid. It's important it remains
+		// mostly circular, as we do a simple collision check against a perfect
+		// circle.
+		int verts = 20;
+		for (int i = 0; i < verts; i++)
+		{
+			float noise = (float)rand() / (float)RAND_MAX * 0.4f + 0.8f;
+			vecModelAsteroid.push_back(make_pair(noise * sinf(((float)i / (float)verts) * 6.28318f),
+				noise * cosf(((float)i / (float)verts) * 6.28318f)));
+		}
+
+		ResetGame();
+		return true;
+	}
+
+	void ResetGame()
+	{
+		// Initialise Player Position
 		player.x = ScreenWidth() / 2.0f;
 		player.y = ScreenHeight() / 2.0f;
 		player.dx = 0.0f;
 		player.dy = 0.0f;
 		player.angle = 0.0f;
 
-		return true;
+		vecBullets.clear();
+		vecAsteroids.clear();
+
+		// Put in two asteroids
+		vecAsteroids.push_back({ (int)16, 20.0f, 20.0f, 8.0f, -6.0f, 0.0f });
+		vecAsteroids.push_back({ (int)16, 100.0f, 20.0f, -5.0f, 3.0f, 0.0f });
+
+		// Reset game
+		bDead = false;
+		nScore = false;
 	}
 
-	//called by olcConsoleGameEngine
-	//this function updates the screen
-	virtual bool OnUserUpdate(float fElapsedTime)
+	// Implements "wrap around" for various in-game sytems
+	void WrapCoordinates(float ix, float iy, float& ox, float& oy)
 	{
-		// Clear Screen
-		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, 0);
-
-		//Steers the ship
-		if (m_keys[VK_LEFT].bHeld)
-			player.angle -= 5.0f * fElapsedTime; //steering left
-		if (m_keys[VK_RIGHT].bHeld)
-			player.angle += 5.0f * fElapsedTime; //steering right
-
-		//Thrust
-		if (m_keys[VK_UP].bHeld) // thrusts with the up arrow
-		{
-			//since we don't store thrust as part of our space object, we need to update the velocity
-			// ACCELERATION changes VELOCITY (with respect to time)
-			player.dx += sin(player.angle) * 20.0f * fElapsedTime; //changing the x velocity by sin of the player angle multiplied by a random number (20), multiplied by the elapsed time
-			player.dy += -cos(player.angle) * 20.0f * fElapsedTime;//altering stuff in the y axis uses the cos function
-			//by doing this, we know that we get a vector related to the angle that the player is pointing in
-			//we can use that vector as our velocity vector
-		}
-
-		//VELOCITY changes POSITION (with respect to time)
-		player.x += player.dx * fElapsedTime; //takes the player's x-coordinate and update it by its velocity vector that we've just calculated right above, multiplied by the elapsed time
-		player.y += player.dy * fElapsedTime;
-
-		// keep ship within the game space
-		WrapCoordinates(player.x, player.y, player.x, player.y);
-
-		// update and draw asteroids
-		for (auto& a : vecAsteroids) // to iterate through the vector
-		{
-			// fElapseTime is the update between successive frames, the time taken between one frame and the next
-			//this allows us to run the program at a known speed, across a variety of different computing systems
-			a.x += a.dx * fElapsedTime; //the x position of the asteroid needs to be updated by the velocity vector, multiplied by the elapsed time
-			a.y += a.dy * fElapsedTime; //same as above, but the y coordinates now
-			WrapCoordinates(a.x, a.y, a.x, a.y); //passes in the current x and y position into the function and then get them back
-
-			// this loop is to draw the asteroids
-			for (int x = 0; x < a.nSize; x++)
-				for (int y = 0; y < a.nSize; y++)
-					Draw(a.x + x, a.y + y, PIXEL_QUARTER, FG_RED);
-		}
-
-		//Draw ship - define our ship as a set of 3 points
-		float mx[3] = { 0.0f, -2.5f, +2.5f }; //ship model vertices
-		float my[3] = { -5.5f, +2.5f, +2.5f };
-
-		//created two more arrays to store the transformed points
-		//the model above never changes, but what we draw to the screen is the transformation below (this is how all wire frame AND 3D graphics work)
-		float sx[3], sy[3];
-
-		//Rotate
-		for (int i = 0; i < 3; i++) //this loop goes through all of the points in the model and multiplies them (like the matrix versus the vector)
-		{
-			//the angle we want to rotate by is the "player.angle", so we can rotate the model triangle in the direction the player is facing 
-			sx[i] = mx[i] * cosf(player.angle) - my[i] * sinf(player.angle);
-			sy[i] = mx[i] * sinf(player.angle) + my[i] * cosf(player.angle);
-		}
-
-		//Translate
-		//once the model has been rotated, we then need to offset it to where the player currently is (set it to player's x and y coordinates)
-		for (int i = 0; i < 3; i++)
-		{
-			sx[i] = sx[i] + player.x; //players x coordinate where the position vector of the spaceship is
-			sy[i] = sy[i] + player.y; //players y coordinate
-		}
-
-		//Draw closed polygon
-		for (int i = 0; i < 4; i++) //loops through all the points and draws lines between them
-		{
-			int j = (i + 1);
-			DrawLine(sx[i % 3], sy[i % 3], sx[j % 3], sy[j % 3]); //4 points
-		}
-
-		return true;
-	}
-
-	void WrapCoordinates(float ix, float iy, float &ox, float &oy) // ix and iy are the inputs, outputs ox and oy
-	{
-		// sets the output to the input
 		ox = ix;
 		oy = iy;
-		// then check if the input is beyond the boundaries of our array
-		// if the input x is less than 0, then I want to adjust my output to be the input x plus the current screen width, which is an int (why we used a float)
-		if (ix < 0.0f) ox = ix + (float)ScreenWidth();
-		// if the input x is greater than the screen width, then we update the output again
-		if (ix >= (float)ScreenWidth()) ox = ix - (float)ScreenWidth();
-		
-		// if the input y is less than 0, then I want to adjust my output to be the input y plus the current screen width, which is an int (why we used a float)
-		if (iy < 0.0f) oy = iy + (float)ScreenHeight();
-		// if the input y is greater than the screen width, then we update the output again
+		if (ix < 0.0f)	ox = ix + (float)ScreenWidth();
+		if (ix >= (float)ScreenWidth())	ox = ix - (float)ScreenWidth();
+		if (iy < 0.0f)	oy = iy + (float)ScreenHeight();
 		if (iy >= (float)ScreenHeight()) oy = iy - (float)ScreenHeight();
-
 	}
-	//overrides the draw function
-	virtual void Draw(int x, int y, short c = 0x2588, short col = 0x000F)
+
+	// Overriden to handle toroidal drawing routines
+	virtual void Draw(int x, int y, wchar_t c = 0x2588, short col = 0x000F)
 	{
 		float fx, fy;
 		WrapCoordinates(x, y, fx, fy);
 		olcConsoleGameEngine::Draw(fx, fy, c, col);
+	}
 
+	bool IsPointInsideCircle(float cx, float cy, float radius, float x, float y)
+	{
+		return sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy)) < radius;
+	}
 
+	// Called by olcConsoleGameEngine
+	virtual bool OnUserUpdate(float fElapsedTime)
+	{
+		if (bDead)
+			ResetGame();
+
+		// Clear Screen
+		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, 0);
+
+		// Steer Ship
+		if (m_keys[VK_LEFT].bHeld)
+			player.angle -= 5.0f * fElapsedTime;
+		if (m_keys[VK_RIGHT].bHeld)
+			player.angle += 5.0f * fElapsedTime;
+
+		// Thrust? Apply ACCELERATION
+		if (m_keys[VK_UP].bHeld)
+		{
+			// ACCELERATION changes VELOCITY (with respect to time)
+			player.dx += sin(player.angle) * 20.0f * fElapsedTime;
+			player.dy += -cos(player.angle) * 20.0f * fElapsedTime;
+		}
+
+		// VELOCITY changes POSITION (with respect to time)
+		player.x += player.dx * fElapsedTime;
+		player.y += player.dy * fElapsedTime;
+
+		// Keep ship in game space
+		WrapCoordinates(player.x, player.y, player.x, player.y);
+
+		// Check ship collision with asteroids
+		for (auto& a : vecAsteroids)
+			if (IsPointInsideCircle(a.x, a.y, a.nSize, player.x, player.y))
+				bDead = true; // Uh oh...
+
+		// Fire Bullet in direction of player
+		if (m_keys[VK_SPACE].bReleased)
+			vecBullets.push_back({ 0, player.x, player.y, 50.0f * sinf(player.angle), -50.0f * cosf(player.angle), 100.0f });
+
+		// Update and draw asteroids
+		for (auto& a : vecAsteroids)
+		{
+			// VELOCITY changes POSITION (with respect to time)
+			a.x += a.dx * fElapsedTime;
+			a.y += a.dy * fElapsedTime;
+			a.angle += 0.5f * fElapsedTime; // Add swanky rotation :)
+
+			// Asteroid coordinates are kept in game space (toroidal mapping)
+			WrapCoordinates(a.x, a.y, a.x, a.y);
+
+			// Draw Asteroids
+			DrawWireFrameModel(vecModelAsteroid, a.x, a.y, a.angle, (float)a.nSize, FG_YELLOW);
+		}
+
+		// Any new asteroids created after collision detection are stored
+		// in a temporary vector, so we don't interfere with the asteroids
+		// vector iterator in the for(auto)
+		vector<sSpaceObject> newAsteroids;
+
+		// Update Bullets
+		for (auto& b : vecBullets)
+		{
+			b.x += b.dx * fElapsedTime;
+			b.y += b.dy * fElapsedTime;
+			WrapCoordinates(b.x, b.y, b.x, b.y);
+			b.angle -= 1.0f * fElapsedTime;
+
+			// Check collision with asteroids
+			for (auto& a : vecAsteroids)
+			{
+				//if (IsPointInsideRectangle(a.x, a.y, a.x + a.nSize, a.y + a.nSize, b.x, b.y))
+				if (IsPointInsideCircle(a.x, a.y, a.nSize, b.x, b.y))
+				{
+					// Asteroid Hit - Remove bullet
+					// We've already updated the bullets, so force bullet to be offscreen
+					// so it is cleaned up by the removal algorithm. 
+					b.x = -100;
+
+					// Create child asteroids
+					if (a.nSize > 4)
+					{
+						float angle1 = ((float)rand() / (float)RAND_MAX) * 6.283185f;
+						float angle2 = ((float)rand() / (float)RAND_MAX) * 6.283185f;
+						newAsteroids.push_back({ (int)a.nSize >> 1 ,a.x, a.y, 10.0f * sinf(angle1), 10.0f * cosf(angle1), 0.0f });
+						newAsteroids.push_back({ (int)a.nSize >> 1 ,a.x, a.y, 10.0f * sinf(angle2), 10.0f * cosf(angle2), 0.0f });
+					}
+
+					// Remove asteroid - Same approach as bullets
+					a.x = -100;
+					nScore += 100; // Small score increase for hitting asteroid
+				}
+			}
+		}
+
+		// Append new asteroids to existing vector
+		for (auto a : newAsteroids)
+			vecAsteroids.push_back(a);
+
+		// Clear up dead objects - They are out of game space
+
+		// Remove asteroids that have been blown up
+		if (vecAsteroids.size() > 0)
+		{
+			auto i = remove_if(vecAsteroids.begin(), vecAsteroids.end(), [&](sSpaceObject o) { return (o.x < 0); });
+			if (i != vecAsteroids.end())
+				vecAsteroids.erase(i);
+		}
+
+		if (vecAsteroids.empty()) // If no asteroids, level complete! :) - you win MORE asteroids!
+		{
+			// Level Clear
+			nScore += 1000; // Large score for level progression
+			vecAsteroids.clear();
+			vecBullets.clear();
+
+			// Add two new asteroids, but in a place where the player is not, we'll simply
+			// add them 90 degrees left and right to the player, their coordinates will
+			// be wrapped by the next asteroid update
+			vecAsteroids.push_back({ (int)16, 30.0f * sinf(player.angle - 3.14159f / 2.0f) + player.x,
+											  30.0f * cosf(player.angle - 3.14159f / 2.0f) + player.y,
+											  10.0f * sinf(player.angle), 10.0f * cosf(player.angle), 0.0f });
+
+			vecAsteroids.push_back({ (int)16, 30.0f * sinf(player.angle + 3.14159f / 2.0f) + player.x,
+											  30.0f * cosf(player.angle + 3.14159f / 2.0f) + player.y,
+											  10.0f * sinf(-player.angle), 10.0f * cosf(-player.angle), 0.0f });
+		}
+
+		// Remove bullets that have gone off screen
+		if (vecBullets.size() > 0)
+		{
+			auto i = remove_if(vecBullets.begin(), vecBullets.end(), [&](sSpaceObject o) { return (o.x < 1 || o.y < 1 || o.x >= ScreenWidth() - 1 || o.y >= ScreenHeight() - 1); });
+			if (i != vecBullets.end())
+				vecBullets.erase(i);
+		}
+
+		// Draw Bullets
+		for (auto b : vecBullets)
+			Draw(b.x, b.y);
+
+		// Draw Ship
+		DrawWireFrameModel(vecModelShip, player.x, player.y, player.angle);
+
+		// Draw Score
+		DrawString(2, 2, L"SCORE: " + to_wstring(nScore));
+		return true;
+	}
+
+	void DrawWireFrameModel(const vector<pair<float, float>>& vecModelCoordinates, float x, float y, float r = 0.0f, float s = 1.0f, short col = FG_WHITE)
+	{
+		// pair.first = x coordinate
+		// pair.second = y coordinate
+
+		// Create translated model vector of coordinate pairs
+		vector<pair<float, float>> vecTransformedCoordinates;
+		int verts = vecModelCoordinates.size();
+		vecTransformedCoordinates.resize(verts);
+
+		// Rotate
+		for (int i = 0; i < verts; i++)
+		{
+			vecTransformedCoordinates[i].first = vecModelCoordinates[i].first * cosf(r) - vecModelCoordinates[i].second * sinf(r);
+			vecTransformedCoordinates[i].second = vecModelCoordinates[i].first * sinf(r) + vecModelCoordinates[i].second * cosf(r);
+		}
+
+		// Scale
+		for (int i = 0; i < verts; i++)
+		{
+			vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first * s;
+			vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second * s;
+		}
+
+		// Translate
+		for (int i = 0; i < verts; i++)
+		{
+			vecTransformedCoordinates[i].first = vecTransformedCoordinates[i].first + x;
+			vecTransformedCoordinates[i].second = vecTransformedCoordinates[i].second + y;
+		}
+
+		// Draw Closed Polygon
+		for (int i = 0; i < verts + 1; i++)
+		{
+			int j = (i + 1);
+			DrawLine(vecTransformedCoordinates[i % verts].first, vecTransformedCoordinates[i % verts].second,
+				vecTransformedCoordinates[j % verts].first, vecTransformedCoordinates[j % verts].second, PIXEL_SOLID, col);
+		}
 	}
 };
 
