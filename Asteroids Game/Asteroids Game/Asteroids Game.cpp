@@ -26,12 +26,12 @@ private:
 	struct sSpaceObject //struct to represent object
 	{
 		// tells us where the object is in "space"
+		int nSize; //most of the objects will be asteroids and they will change in size
 		float x; //x coordinate
 		float y; //y coordinate
 		////velocity coordinates (the speed and direction that the object is traveling in)
 		float dx; //velocity x coordinate
 		float dy; //velocity y coordinate
-		int nSize; //most of the objects will be asteroids and they will change in size
 		float angle;
 	};
 
@@ -91,7 +91,7 @@ protected:
 		nScore = false;
 	}
 
-	// Implements "wrap around" for various in-game sytems
+	// Implements "wrap around" for various in-game systems
 	void WrapCoordinates(float ix, float iy, float& ox, float& oy)
 	{
 		ox = ix;
@@ -189,7 +189,7 @@ protected:
 				if (IsPointInsideCircle(a.x, a.y, a.nSize, b.x, b.y))
 				{
 					// Asteroid Hit - Remove bullet
-					// We've already updated the bullets, so force bullet to be offscreen
+					// We've already updated the bullets, so force bullet to be off screen
 					// so it is cleaned up by the removal algorithm. 
 					b.x = -100;
 

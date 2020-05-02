@@ -2,30 +2,12 @@
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(759,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(1099,1): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\olcConsoleGameEngine.h(1196,1): warning C4312: 'type cast': conversion from 'DWORD' to 'olcConsoleGameEngine *' of greater size
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(86,58): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(86,58): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(87,59): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(87,59): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(109,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(109,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(110,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(110,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(150,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(155,85): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(155,85): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(189,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(201,45): error C2397: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(201,45): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(201,89): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(201,89): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(202,45): error C2397: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(202,45): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(202,89): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(202,89): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(238,48): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(238,48): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(242,49): error C2397: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(242,49): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(255,15): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(255,10): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\Asteroids Game.cpp(272,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
@@ -49,3 +31,4 @@ C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\Asteroids Game\A
           [
               _Ty1=float
           ]
+  Asteroids Game.vcxproj -> C:\Users\User\source\repos\ntilbe\Asteroids-Game\Asteroids Game\x64\Debug\Asteroids Game.exe
